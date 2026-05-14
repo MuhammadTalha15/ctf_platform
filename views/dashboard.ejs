@@ -1,0 +1,175 @@
+<%- include('partials/header') %>
+<%- include('partials/user-shell') %>
+
+      <div class="page-header">
+        <div class="breadcrumb">Dashboard <span>›</span> Overview</div>
+        <div class="page-title">Welcome back, <span style="color:var(--accent)"><%= user.displayName || user.username %></span></div>
+        <div class="page-subtitle">Continue your cybersecurity journey.</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card red">
+          <div class="stat-top">
+            <div class="stat-icon red">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 13L2 9z"/></svg>
+            </div>
+            <span class="stat-delta up">Solved</span>
+          </div>
+          <div class="stat-label">Challenges Solved</div>
+          <div class="stat-value" id="cntSolved"><%= (user.solvedChallenges || []).length %></div>
+          <div class="stat-sub">of <%= stats.totalChallenges || 0 %> total challenges</div>
+        </div>
+        <div class="stat-card cyan">
+          <div class="stat-top">
+            <div class="stat-icon cyan">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <span class="stat-delta up">Points</span>
+          </div>
+          <div class="stat-label">Total Points</div>
+          <div class="stat-value" id="cntPoints"><%= user.points || 0 %></div>
+          <div class="stat-sub"><%= stats.totalChallenges || 0 %> challenges available</div>
+        </div>
+        <div class="stat-card orange">
+          <div class="stat-top">
+            <div class="stat-icon orange">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            </div>
+            <span class="stat-delta up"><%= rank || '-' %></span>
+          </div>
+          <div class="stat-label">Global Rank</div>
+          <div class="stat-value" style="font-size:20px">#<%= rank || 'N/A' %></div>
+          <div class="stat-sub">of <%= totalUsers || 0 %> players</div>
+        </div>
+        <div class="stat-card purple">
+          <div class="stat-top">
+            <div class="stat-icon purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <span class="stat-delta up">Progress</span>
+          </div>
+          <div class="stat-label">Completion</div>
+          <div class="stat-value" style="font-size:20px"><%= stats.totalChallenges > 0 ? Math.round(((user.solvedChallenges || []).length / stats.totalChallenges) * 100) : 0 %>%</div>
+          <div class="stat-sub"><%= (user.solvedChallenges || []).length %> / <%= stats.totalChallenges || 0 %> challenges</div>
+        </div>
+      </div>
+
+      <div class="grid-2-eq" style="margin-bottom:20px">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Recent Activity</span></div>
+          <div class="timeline">
+            <% if (!activities || activities.length === 0) { %>
+            <div class="empty">No platform activity yet.</div>
+            <% } else { %>
+            <% activities.slice().reverse().forEach(a => { %>
+            <div class="tl-item">
+              <div class="tl-dot-wrap"><div class="tl-dot low"></div></div>
+              <div class="tl-content">
+                <div class="tl-title"><%= a.text %></div>
+                <div class="tl-meta"><span class="tl-time"><%= new Date(a.time).toLocaleString() %></span></div>
+              </div>
+            </div>
+            <% }); %>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title">Category Progress</span></div>
+          <div style="padding:16px 18px">
+            <% if (Object.keys(categoryStats).length === 0) { %>
+            <div class="empty">No challenges available</div>
+            <% } else { %>
+            <% Object.keys(categoryStats).forEach(cat => { %>
+            <% const total = categoryStats[cat].total; const userSolves = categoryStats[cat].userSolves || 0; %>
+            <div style="margin-bottom:12px">
+              <div class="progress-label"><span><%= cat %></span><span><%= userSolves %>/<%= total %> solved</span></div>
+              <div class="progress-bar"><div class="progress-fill <%= userSolves === total ? 'green' : '' %>" style="width:<%= total > 0 ? Math.round((userSolves / total) * 100) : 0 %>%"></div></div>
+            </div>
+            <% }); %>
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-bottom:20px">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Suggested Challenges</span><a href="/challenges" class="card-action">Browse all &rarr;</a></div>
+          <div class="incident-list">
+            <% if (!suggested || suggested.length === 0) { %>
+            <div class="empty">No suggestions available</div>
+            <% } else { %>
+            <% suggested.forEach(c => { %>
+            <a href="/challenges/<%= c.id %>" class="incident-row" style="display:flex;text-decoration:none">
+              <div class="inc-severity <%= c.difficulty === 'easy' ? 'low' : c.difficulty === 'medium' ? 'medium' : 'high' %>"></div>
+              <div class="inc-info"><div class="inc-name"><%= c.title %></div><div class="inc-target"><%= c.category %> &middot; <%= c.points %> pts</div></div>
+              <span class="td-badge <%= c.difficulty %>"><%= c.difficulty.charAt(0).toUpperCase() + c.difficulty.slice(1) %></span>
+            </a>
+            <% }); %>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title">Your Activity</span></div>
+          <div class="timeline">
+            <% if (!recentActivity || recentActivity.length === 0) { %>
+            <div class="empty">No activity yet. Start solving challenges!</div>
+            <% } else { %>
+            <% recentActivity.forEach(a => { %>
+            <div class="tl-item">
+              <div class="tl-dot-wrap"><div class="tl-dot low"></div></div>
+              <div class="tl-content">
+                <div class="tl-title"><%= a.text %></div>
+                <div class="tl-meta"><span class="tl-time"><%= new Date(a.time).toLocaleString() %></span></div>
+              </div>
+            </div>
+            <% }); %>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title">Quick Tips</span></div>
+          <div style="padding:16px 18px">
+            <% const tips = ['Try starting with Web challenges if you\'re new','CTF flags follow the format CTF{...}','Use the hint button if you\'re stuck','Check the leaderboard to see top players','Each category builds different skills']; %>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <% tips.forEach(t => { %>
+              <div style="display:flex;align-items:flex-start;gap:10px;font-size:11px;color:var(--text-muted)">
+                <span style="color:var(--accent);flex-shrink:0;font-size:14px">&rarr;</span>
+                <span><%= t %></span>
+              </div>
+              <% }); %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-header"><span class="card-title">Challenge Distribution</span></div>
+        <div style="padding:16px 18px">
+          <% if (Object.keys(categoryStats).length === 0) { %>
+          <div class="empty">No data available</div>
+          <% } else { %>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px">
+            <% Object.keys(categoryStats).forEach(cat => { %>
+            <% const total = categoryStats[cat].total; const userSolves = categoryStats[cat].userSolves || 0; %>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center">
+              <div style="font-size:22px;font-weight:800;font-family:var(--font-head);color:var(--text)"><%= userSolves %><span style="font-size:14px;color:var(--text-muted)">/<%= total %></span></div>
+              <div style="font-size:10px;color:var(--text-muted);margin-top:2px"><%= cat %></div>
+              <div class="progress-bar" style="margin-top:8px"><div class="progress-fill <%= userSolves === total ? 'green' : '' %>" style="width:<%= total > 0 ? (userSolves/total)*100 : 0 %>%"></div></div>
+            </div>
+            <% }); %>
+          </div>
+          <% } %>
+        </div>
+      </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  animateCounter('cntSolved', <%= (user.solvedChallenges || []).length %>);
+  animateCounter('cntPoints', <%= user.points || 0 %>);
+});
+</script>
+
+<%- include('partials/footer') %>

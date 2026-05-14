@@ -1,0 +1,131 @@
+<div id="userPopup" class="popup-overlay" style="display:none" onclick="closeUserPopup(event)">
+  <div class="popup-card" onclick="event.stopPropagation()">
+    <button class="popup-close" onclick="closeUserPopup()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="popup-body">
+      <div class="popup-loading" id="popupLoading">
+        <div class="popup-spinner"></div>
+        <span>Loading profile...</span>
+      </div>
+      <div class="popup-content" id="popupContent" style="display:none">
+        <div class="popup-header">
+          <div class="popup-avatar" id="popupAvatar">
+            <span id="popupAvatarLetter"></span>
+            <img id="popupAvatarImg" src="" alt="">
+          </div>
+          <div class="popup-header-info">
+            <div class="popup-name" id="popupName"></div>
+            <div class="popup-username" id="popupUsername"></div>
+            <div class="popup-meta" id="popupMeta"></div>
+          </div>
+          <div class="popup-rank-badge" id="popupRankBadge"></div>
+        </div>
+        <div class="popup-bio" id="popupBio" style="display:none"></div>
+        <div class="popup-stats-row">
+          <div class="popup-stat">
+            <div class="popup-stat-val" id="popupPoints">0</div>
+            <div class="popup-stat-lbl">Points</div>
+          </div>
+          <div class="popup-stat">
+            <div class="popup-stat-val" id="popupSolves">0</div>
+            <div class="popup-stat-lbl">Solves</div>
+          </div>
+          <div class="popup-stat">
+            <div class="popup-stat-val" id="popupRank">#0</div>
+            <div class="popup-stat-lbl">Rank</div>
+          </div>
+        </div>
+        <div class="popup-social" id="popupSocial" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.popup-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center}
+.popup-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;width:360px;max-width:92vw;position:relative}
+.popup-close{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--text-dim);cursor:pointer;line-height:1;padding:4px}
+.popup-close:hover{color:var(--text)}
+.popup-close svg{width:14px;height:14px;display:block}
+.popup-body{padding:20px}
+.popup-loading{display:flex;flex-direction:column;align-items:center;gap:10px;padding:36px 20px;color:var(--text-muted);font-size:12px}
+.popup-spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:popupSpin 0.6s linear infinite}
+@keyframes popupSpin{to{transform:rotate(360deg)}}
+.popup-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.popup-avatar{width:40px;height:40px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:var(--accent);overflow:hidden;flex-shrink:0}
+.popup-avatar img{width:100%;height:100%;object-fit:cover}
+.popup-header-info{flex:1;min-width:0}
+.popup-name{font-size:14px;font-weight:600;color:var(--text)}
+.popup-username{font-size:11px;color:var(--text-muted)}
+.popup-meta{font-size:10px;color:var(--text-dim);margin-top:2px}
+.popup-rank-badge{font-size:10px;font-weight:600;padding:2px 10px;border-radius:10px;border:1px solid;margin-left:auto}
+.popup-rank-badge.gold{background:rgba(255,215,0,0.12);border-color:rgba(255,215,0,0.3);color:#FFD700}
+.popup-rank-badge.silver{background:rgba(192,192,192,0.12);border-color:rgba(192,192,192,0.3);color:#C0C0C0}
+.popup-rank-badge.bronze{background:rgba(205,127,50,0.12);border-color:rgba(205,127,50,0.3);color:#CD7F32}
+.popup-rank-badge.default{background:var(--accent-dim);border-color:rgba(255,45,45,0.25);color:var(--accent)}
+.popup-bio{font-size:11px;color:var(--text-muted);line-height:1.5;padding:10px 0;border-top:1px solid var(--border);margin-bottom:12px}
+.popup-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+.popup-stat{text-align:center;padding:10px 6px;background:var(--surface2);border:1px solid var(--border);border-radius:6px}
+.popup-stat-val{font-size:18px;font-weight:700;color:var(--text);line-height:1}
+.popup-stat-lbl{font-size:9px;color:var(--text-muted);margin-top:2px}
+.popup-social{display:flex;flex-wrap:wrap;gap:4px;padding-top:10px;border-top:1px solid var(--border);justify-content:center}
+.popup-social a{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted);padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:5px}
+.popup-social a:hover{border-color:var(--border-hover);color:var(--text)}
+.popup-social a svg{width:13px;height:13px;flex-shrink:0}
+</style>
+
+<script>
+var popupLoading = document.getElementById('popupLoading');
+var popupContent = document.getElementById('popupContent');
+function openUserPopup(userId) {
+  var overlay = document.getElementById('userPopup');
+  overlay.style.display = 'flex';
+  popupLoading.style.display = 'flex';
+  popupContent.style.display = 'none';
+  fetch('/api/users/' + encodeURIComponent(userId) + '/profile')
+    .then(function(r) { if (!r.ok) throw new Error('Not found'); return r.json(); })
+    .then(function(u) { renderUserPopup(u); })
+    .catch(function() { popupLoading.innerHTML = '<span style="color:var(--accent)">Failed to load user</span>'; });
+}
+function renderUserPopup(u) {
+  popupLoading.style.display = 'none';
+  popupContent.style.display = 'block';
+  var letter = (u.displayName || u.username).charAt(0).toUpperCase();
+  var img = document.getElementById('popupAvatarImg');
+  var letterSpan = document.getElementById('popupAvatarLetter');
+  if (u.avatarUrl && u.avatarUrl.startsWith('http')) { img.src = u.avatarUrl; img.style.display = 'block'; letterSpan.style.display = 'none'; }
+  else { img.style.display = 'none'; letterSpan.style.display = 'inline'; letterSpan.textContent = letter; }
+  document.getElementById('popupName').textContent = u.displayName;
+  document.getElementById('popupUsername').textContent = '@' + u.username;
+  document.getElementById('popupMeta').textContent = 'Joined ' + new Date(u.createdAt).toLocaleDateString();
+  document.getElementById('popupPoints').textContent = u.points;
+  document.getElementById('popupSolves').textContent = u.solvedCount;
+  document.getElementById('popupRank').textContent = u.rank > 0 ? '#' + u.rank : '#N/A';
+
+  var badge = document.getElementById('popupRankBadge');
+  badge.className = 'popup-rank-badge';
+  if (u.rank === 1) { badge.textContent = 'Gold'; badge.classList.add('gold'); }
+  else if (u.rank === 2) { badge.textContent = 'Silver'; badge.classList.add('silver'); }
+  else if (u.rank === 3) { badge.textContent = 'Bronze'; badge.classList.add('bronze'); }
+  else if (u.rank > 0) { badge.textContent = '#' + u.rank + ' Rank'; badge.classList.add('default'); }
+  else { badge.textContent = 'N/A'; badge.classList.add('default'); }
+  var bio = document.getElementById('popupBio');
+  if (u.bio) { bio.textContent = u.bio; bio.style.display = 'block'; } else { bio.style.display = 'none'; }
+  var social = document.getElementById('popupSocial');
+  var links = [];
+  if (u.github) links.push({url:u.github, label:'GitHub', icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>'});
+  if (u.twitter) links.push({url:u.twitter, label:'X', icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>'});
+  if (u.linkedin) links.push({url:u.linkedin, label:'LinkedIn', icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>'});
+  if (u.website) links.push({url:u.website, label:'Website', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>'});
+  if (links.length) {
+    social.style.display = 'flex';
+    social.innerHTML = links.map(function(l) { return '<a href="' + escHtml(l.url) + '" target="_blank" rel="noopener noreferrer">' + l.icon + '<span>' + escHtml(l.label) + '</span></a>'; }).join('');
+  } else { social.style.display = 'none'; }
+}
+function closeUserPopup(e) { if (e && e.target !== document.getElementById('userPopup')) return; document.getElementById('userPopup').style.display = 'none'; }
+document.addEventListener('click', function(e) {
+  var trigger = e.target.closest('[data-user-id]');
+  if (trigger) { e.preventDefault(); openUserPopup(trigger.getAttribute('data-user-id')); }
+});
+</script>

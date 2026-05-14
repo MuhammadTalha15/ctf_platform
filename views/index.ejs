@@ -1,0 +1,313 @@
+<%- include('partials/header') %>
+<div class="landing-page">
+<div class="app" style="height:auto;min-height:100vh;display:block">
+
+<div class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-orbs">
+    <div class="hero-orb"></div>
+    <div class="hero-orb"></div>
+    <div class="hero-orb"></div>
+  </div>
+  <div class="hero-particles" id="heroParticles"></div>
+  <div class="hero-mouse-glow" id="mouseGlow"></div>
+  <div class="hero-floating-badges">
+    <div class="hero-floating-badge web">Web</div>
+    <div class="hero-floating-badge crypto">Crypto</div>
+    <div class="hero-floating-badge pwn">Pwn</div>
+    <div class="hero-floating-badge forensics">Forensics</div>
+  </div>
+
+  <div class="hero-badge stagger">
+    <div class="hero-badge-dot"></div> CTF Learning Platform
+  </div>
+
+  <div class="hero-title stagger" style="transition-delay:0.15s">
+    Hack.<br>Learn.<span class="glitch" style="color:var(--accent)"> Conquer.</span>
+  </div>
+  <div class="type-cursor" style="font-family:var(--font-head);font-size:20px;color:var(--text-dim);margin-bottom:8px;transition-delay:0.25s" class="stagger"></div>
+
+  <div class="hero-sub stagger" style="transition-delay:0.3s">
+    Master cybersecurity through hands-on CTF challenges across <span style="color:var(--accent);font-weight:600">Web</span>, <span style="color:var(--cyan);font-weight:600">Crypto</span>, <span style="color:var(--orange);font-weight:600">Forensics</span>, <span style="color:var(--purple);font-weight:600">Reverse</span>, and more.
+  </div>
+
+  <div class="hero-actions stagger" style="transition-delay:0.45s">
+    <% if (user) { %>
+    <a href="/dashboard" class="hero-btn primary pulse-glow">Go to Dashboard →</a>
+    <% if (user.role === 'admin') { %><a href="/admin/dashboard" class="hero-btn secondary">Admin Panel</a><% } %>
+    <% } else { %>
+    <a href="/register" class="hero-btn primary pulse-glow">Get Started Free</a>
+    <a href="/login" class="hero-btn secondary" id="signInBtn">Sign In</a>
+    <% } %>
+  </div>
+
+  <div class="hero-stats stagger" style="transition-delay:0.55s">
+    <div class="hero-stat"><div class="hero-stat-val" style="color:var(--accent)"><span class="stat-counter" data-target="<%= stats?.totalChallenges || 12 %>">0</span></div><div class="hero-stat-label">Challenges</div></div>
+    <div class="hero-stat"><div class="hero-stat-val" style="color:var(--cyan)"><span class="stat-counter" data-target="<%= stats?.totalUsers || 0 %>">0</span></div><div class="hero-stat-label">Players</div></div>
+    <div class="hero-stat"><div class="hero-stat-val" style="color:var(--orange)"><span class="stat-counter" data-target="<%= typeof totalCategories !== 'undefined' ? totalCategories : '6' %>">0</span></div><div class="hero-stat-label">Categories</div></div>
+    <div class="hero-stat"><div class="hero-stat-val" style="color:var(--green)"><span class="stat-counter" data-target="<%= typeof totalDifficulties !== 'undefined' ? totalDifficulties : '4' %>">0</span></div><div class="hero-stat-label">Difficulties</div></div>
+  </div>
+
+  <div class="hero-scroll stagger" style="transition-delay:0.7s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</div>
+
+<div class="section" style="animation:fadeUp 0.6s ease 0.3s both">
+  <div class="section-title">How It <span style="color:var(--accent)">Works</span></div>
+  <div class="section-sub">Three simple steps to start your cybersecurity journey</div>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <div class="step-icon cyan">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      </div>
+      <div class="step-title">Create Account</div>
+      <div class="step-desc">Sign up with your email and choose a username. Free and open to everyone.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-icon orange">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="step-title">Solve Challenges</div>
+      <div class="step-desc">Browse challenges by category and difficulty. Test your skills and earn points.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <div class="step-icon green">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <div class="step-title">Climb Ranks</div>
+      <div class="step-desc">Compete with other players, earn points, and climb the leaderboard.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Practice <span style="color:var(--accent)">Real</span> Skills</div>
+  <div class="section-sub">Challenges designed by security professionals to build practical skills</div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 13L2 9z"/></svg></div>
+      <div class="feature-title">Web Exploitation</div>
+      <div class="feature-desc">SQL injection, XSS, CSRF, SSRF, and more. Learn to break and secure web applications.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg></div>
+      <div class="feature-title">Cryptography</div>
+      <div class="feature-desc">Classic ciphers, RSA, AES, hash cracking, and modern cryptographic attacks.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="feature-title">Reverse Engineering</div>
+      <div class="feature-desc">Analyze binaries, crackme challenges, unpack malware, and understand executable internals.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div class="feature-title">Binary Exploitation</div>
+      <div class="feature-desc">Buffer overflows, ROP chains, format strings, and modern exploit mitigations.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+      <div class="feature-title">Forensics</div>
+      <div class="feature-desc">Steganography, PCAP analysis, memory forensics, and disk investigation techniques.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+      <div class="feature-title">Miscellaneous</div>
+      <div class="feature-desc">OSINT, programming puzzles, logic challenges, and everything in between.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);max-width:none;padding-left:24px;padding-right:24px">
+  <div style="max-width:1000px;margin:0 auto">
+    <div class="section-title">Why <span style="color:var(--accent)">CTFArena</span></div>
+    <div class="section-sub">What makes our platform stand out</div>
+    <div class="grid-3">
+      <div class="feature-card" style="text-align:center;padding:32px 20px">
+        <div style="font-size:36px;font-weight:800;color:var(--accent);font-family:var(--font-head)">12+</div>
+        <div style="font-size:13px;font-weight:600;margin:8px 0 4px;color:var(--text)">Curated Challenges</div>
+        <div style="font-size:11px;color:var(--text-muted);line-height:1.5">Hand-picked challenges covering all major CTF categories from easy to insane.</div>
+      </div>
+      <div class="feature-card" style="text-align:center;padding:32px 20px">
+        <div style="font-size:36px;font-weight:800;color:var(--cyan);font-family:var(--font-head)">24/7</div>
+        <div style="font-size:13px;font-weight:600;margin:8px 0 4px;color:var(--text)">Always Available</div>
+        <div style="font-size:11px;color:var(--text-muted);line-height:1.5">Platform runs around the clock. Practice anytime, anywhere, at your own pace.</div>
+      </div>
+      <div class="feature-card" style="text-align:center;padding:32px 20px">
+        <div style="font-size:36px;font-weight:800;color:var(--orange);font-family:var(--font-head)">6</div>
+        <div style="font-size:13px;font-weight:600;margin:8px 0 4px;color:var(--text)">Skill Categories</div>
+        <div style="font-size:11px;color:var(--text-muted);line-height:1.5">From web hacking to binary exploitation, build diverse cybersecurity expertise.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Ready to <span style="color:var(--accent)">Hack</span>?</div>
+  <div class="section-sub">Start your cybersecurity journey today — no experience required</div>
+  <div style="text-align:center;margin-top:32px">
+    <% if (user) { %>
+    <a href="/challenges" class="hero-btn primary pulse-glow" style="display:inline-flex">Browse Challenges →</a>
+    <% } else { %>
+    <a href="/register" class="hero-btn primary pulse-glow" style="display:inline-flex">Create Free Account</a>
+    <a href="/login" class="hero-btn secondary" style="display:inline-flex;margin-left:12px">Sign In</a>
+    <% } %>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+(function() {
+  var hero = document.getElementById('hero');
+  if (!hero) return;
+
+  // Stagger entrance animation
+  var stagers = hero.querySelectorAll('.stagger');
+  var staggerObs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('show');
+        staggerObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  stagers.forEach(function(el) { staggerObs.observe(el); });
+
+  // Hero particles (30 floating dots)
+  var particles = document.getElementById('heroParticles');
+  if (particles) {
+    var dotCount = 30;
+    for (var i = 0; i < dotCount; i++) {
+      var dot = document.createElement('div');
+      var size = Math.random() * 3 + 1;
+      var x = Math.random() * 100;
+      var y = Math.random() * 100;
+      var dur = Math.random() * 6 + 4;
+      var del = Math.random() * 3;
+      var op = Math.random() * 0.3 + 0.05;
+      dot.style.cssText = 'position:absolute;width:'+size+'px;height:'+size+'px;background:var(--accent);border-radius:50%;opacity:'+op+';left:'+x+'%;top:'+y+'%;animation:floatDot '+dur+'s ease-in-out infinite;animation-delay:'+del+'s';
+      particles.appendChild(dot);
+    }
+    // Particle network: connect nearby dots with lines
+    var dots = particles.children;
+    var canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:absolute;inset:0;pointer-events:none';
+    particles.appendChild(canvas);
+    var ctx = canvas.getContext('2d');
+    function resizeCanvas() { canvas.width = particles.offsetWidth; canvas.height = particles.offsetHeight; }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    var dotPositions = [];
+    for (var i = 0; i < dotCount; i++) { dotPositions.push({ x: 0, y: 0 }); }
+    function updateNetwork() {
+      for (var i = 0; i < dotCount; i++) {
+        var rect = dots[i].getBoundingClientRect();
+        var pRect = particles.getBoundingClientRect();
+        dotPositions[i].x = rect.left - pRect.left + rect.width / 2;
+        dotPositions[i].y = rect.top - pRect.top + rect.height / 2;
+      }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (var i = 0; i < dotCount; i++) {
+        for (var j = i + 1; j < dotCount; j++) {
+          var dx = dotPositions[i].x - dotPositions[j].x;
+          var dy = dotPositions[i].y - dotPositions[j].y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.moveTo(dotPositions[i].x, dotPositions[i].y);
+            ctx.lineTo(dotPositions[j].x, dotPositions[j].y);
+            ctx.strokeStyle = 'rgba(255,45,45,' + (0.08 * (1 - dist / 120)) + ')';
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(updateNetwork);
+    }
+    updateNetwork();
+  }
+
+  // Mouse tracking glow
+  var mouseGlow = document.getElementById('mouseGlow');
+  if (mouseGlow) {
+    hero.addEventListener('mousemove', function(e) {
+      var rect = hero.getBoundingClientRect();
+      mouseGlow.style.left = (e.clientX - rect.left) + 'px';
+      mouseGlow.style.top = (e.clientY - rect.top) + 'px';
+      mouseGlow.style.opacity = '1';
+    });
+    hero.addEventListener('mouseleave', function() { mouseGlow.style.opacity = '0'; });
+  }
+
+  // Typewriter effect: cycle through category words
+  var typeEl = document.querySelector('.type-cursor');
+  if (typeEl) {
+    var words = ['Web Exploitation', 'Cryptography', 'Forensics', 'Reverse Engineering', 'Binary Exploitation', 'Misc Challenges'];
+    var wordIdx = 0;
+    var charIdx = 0;
+    var isDeleting = false;
+    function typeTick() {
+      var word = words[wordIdx];
+      if (isDeleting) {
+        typeEl.textContent = word.substring(0, charIdx - 1);
+        charIdx--;
+        if (charIdx === 0) { isDeleting = false; wordIdx = (wordIdx + 1) % words.length; setTimeout(typeTick, 500); return; }
+        setTimeout(typeTick, 30);
+      } else {
+        typeEl.textContent = word.substring(0, charIdx + 1);
+        charIdx++;
+        if (charIdx > word.length) { isDeleting = true; setTimeout(typeTick, 1500); return; }
+        setTimeout(typeTick, 60);
+      }
+    }
+    setTimeout(typeTick, 1000);
+  }
+
+  // Stat counter animation
+  function animateCounters() {
+    document.querySelectorAll('.stat-counter').forEach(function(el) {
+      var target = parseInt(el.getAttribute('data-target')) || 0;
+      var current = 0;
+      var step = Math.max(1, Math.ceil(target / 30));
+      var timer = setInterval(function() {
+        current += step;
+        if (current >= target) { el.textContent = target; clearInterval(timer); }
+        else { el.textContent = current; }
+      }, 40);
+    });
+  }
+
+  var heroStats = document.querySelector('.hero-stats');
+  if (heroStats && window.IntersectionObserver) {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { animateCounters(); obs.disconnect(); }
+      });
+    }, { threshold: 0.5 });
+    obs.observe(heroStats);
+  } else if (heroStats) { animateCounters(); }
+
+  // Scroll-reveal for sections
+  if (window.IntersectionObserver) {
+    document.querySelectorAll('.section, .step-card, .feature-card').forEach(function(el) {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(30px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; obs.disconnect(); }
+        });
+      }, { threshold: 0.15 });
+      obs.observe(el);
+    });
+  }
+})();
+</script>
+
+<%- include('partials/footer') %>

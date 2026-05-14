@@ -1,0 +1,90 @@
+<%- include('../partials/header') %>
+<%- include('../partials/admin-shell') %>
+
+      <div class="page-header">
+        <div class="breadcrumb">Admin <span>›</span> Challenges <span>›</span> <%= challenge ? 'Edit' : 'New' %></div>
+        <div class="page-title"><%= challenge ? 'Edit Challenge' : 'New Challenge' %></div>
+        <div class="page-subtitle"><%= challenge ? 'Update challenge details' : 'Create a new CTF challenge' %></div>
+      </div>
+
+      <% if (error) { %>
+      <div style="margin-bottom:16px;padding:10px 14px;background:rgba(255,45,45,0.1);border:1px solid rgba(255,45,45,0.2);border-radius:6px;font-size:12px;color:var(--accent)"><%= error %></div>
+      <% } %>
+
+      <form method="POST" action="/admin/challenges/<%= challenge ? challenge.id + '/edit' : 'new' %>">
+        <div class="settings-section">
+          <div class="settings-title">Challenge Details</div>
+          <div class="settings-row">
+            <div><div class="settings-label">Title *</div><div class="settings-desc">The name of the challenge</div></div>
+            <input type="text" name="title" value="<%= challenge ? challenge.title : '' %>" required class="settings-input" style="width:300px">
+          </div>
+          <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:8px">
+            <div><div class="settings-label">Description *</div><div class="settings-desc">The challenge description shown to users</div></div>
+            <textarea name="description" rows="6" required style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-family:var(--font-mono);font-size:12px;color:var(--text);outline:none;resize:vertical"><%= challenge ? challenge.description : '' %></textarea>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-title">Classification</div>
+          <div class="settings-row">
+            <div><div class="settings-label">Category</div><div class="settings-desc">Challenge category for grouping</div></div>
+            <select name="category" class="settings-input" style="width:200px">
+              <% ['Web','Crypto','Forensics','Pwn','Reverse','Misc'].forEach(cat => { %>
+              <option value="<%= cat %>" <%= challenge && challenge.category === cat ? 'selected' : '' %>><%= cat %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-label">Difficulty</div><div class="settings-desc">Skill level required</div></div>
+            <select name="difficulty" class="settings-input" style="width:200px">
+              <% ['easy','medium','hard','insane'].forEach(d => { %>
+              <option value="<%= d %>" <%= challenge && challenge.difficulty === d ? 'selected' : '' %>><%= d.charAt(0).toUpperCase() + d.slice(1) %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-label">Points</div><div class="settings-desc">Point value for solving</div></div>
+            <input type="number" name="points" value="<%= challenge ? challenge.points : '100' %>" class="settings-input" style="width:200px">
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-label">Author</div><div class="settings-desc">Creator of this challenge</div></div>
+            <input type="text" name="author" value="<%= challenge ? challenge.author : user.username %>" class="settings-input" style="width:200px">
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-title">Flag Configuration</div>
+          <div class="settings-row">
+            <div><div class="settings-label">Flag *</div><div class="settings-desc">The correct answer (case-sensitive)</div></div>
+            <input type="text" name="flag" value="<%= challenge ? challenge.flag : '' %>" required class="settings-input" style="width:300px;font-family:var(--font-mono)" placeholder="CTF{...}">
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-label">Flag Hint</div><div class="settings-desc">Displayed format hint for users</div></div>
+            <input type="text" name="flagHint" value="<%= challenge ? challenge.flagHint : 'CTF{...}' %>" class="settings-input" style="width:300px">
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-label">Active Status</div><div class="settings-desc">Challenge is visible and solvable by users</div></div>
+            <label class="toggle <%= !challenge || challenge.enabled ? 'on' : '' %>" onclick="this.classList.toggle('on')">
+              <input type="checkbox" name="enabled" <%= !challenge || challenge.enabled ? 'checked' : '' %> style="display:none">
+            </label>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:24px">
+          <a href="/admin/challenges" class="filter-btn" style="padding:10px 20px">Cancel</a>
+          <button type="submit" class="filter-btn accent" style="padding:10px 20px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            <%= challenge ? 'Save Changes' : 'Create Challenge' %>
+          </button>
+        </div>
+      </form>
+
+<script>
+document.querySelectorAll('.toggle').forEach(t => {
+  t.addEventListener('click', function() {
+    const cb = this.querySelector('input[type=checkbox]');
+    if (cb) cb.checked = !cb.checked;
+  });
+});
+</script>
+<%- include('../partials/footer') %>

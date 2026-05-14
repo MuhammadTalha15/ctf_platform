@@ -1,0 +1,36 @@
+/* Toast notification */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: var(--text);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  animation: slideDown 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 360px;
+}
+.toast.success { border-left: 3px solid var(--green); }
+.toast.error { border-left: 3px solid var(--accent); }
+.toast.info { border-left: 3px solid var(--cyan); }
+
+/* Landing page tweaks */
+.landing-page .app { flex-direction: column; }
+.landing-page .sidebar { display: none; }
+.landing-page .topbar { display: none; }
+.landing-page .content::-webkit-scrollbar { width: 6px; }
+
+/* Button styles for forms */
+button.filter-btn { font-family: var(--font-mono); }
+button.filter-btn.accent { color: var(--accent); }
+
+/* Progress fill variants */
+.progress-fill.orange { background: var(--orange); }
+.progress-fill.purple { background: var(--purple); }

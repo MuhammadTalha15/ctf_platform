@@ -1,0 +1,30 @@
+<%- include('../partials/header') %>
+<%- include('../partials/admin-shell') %>
+
+      <div class="page-header">
+        <div class="breadcrumb">Admin <span>›</span> Submissions</div>
+        <div class="page-title">Submission Logs</div>
+        <div class="page-subtitle">Raw flag submission log from all users. <%= submissions.length %> total submissions.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Event Log</span></div>
+        <div style="padding:16px 18px;font-family:var(--font-mono);font-size:11px;line-height:1.9">
+          <% if (submissions.length === 0) { %>
+          <div style="text-align:center;padding:40px 20px;color:var(--text-muted);font-size:12px">No submissions yet</div>
+          <% } else { %>
+          <% submissions.forEach(s => { %>
+          <div>
+            <span style="color:var(--text-muted)">[<%= new Date(s.timestamp).toLocaleString() %>]</span>
+            <span style="color:<%= s.correct ? 'var(--green)' : 'var(--accent)' %>"><%= s.correct ? '[CORRECT]' : '[WRONG]' %></span>
+            <span style="color:var(--cyan)"><%= s.username %></span>
+            <span style="color:var(--text-muted)">→</span>
+            <span><%= s.challengeTitle %></span>
+            <span style="color:var(--text-dim)">flag: <%= (s.flag || '').substring(0, 40) %><%= (s.flag || '').length > 40 ? '...' : '' %></span>
+          </div>
+          <% }); %>
+          <% } %>
+        </div>
+      </div>
+
+<%- include('../partials/footer') %>

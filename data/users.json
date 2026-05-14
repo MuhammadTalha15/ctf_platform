@@ -1,0 +1,95 @@
+[
+  {
+    "id": "e97892af-bcfb-4799-862a-d2629e7c04b0",
+    "username": "admin",
+    "email": "admin@ctfplatform.com",
+    "password": "$2a$10$Hm6/HNmfIUZxX7yDtF/fa.aISGY35tQxgbSwt9OJWQEA6q8pX.XXW",
+    "role": "admin",
+    "points": 0,
+    "solvedChallenges": [],
+    "createdAt": "2026-05-11T11:13:25.283Z"
+  },
+  {
+    "id": "f4b85f42-cfe4-4915-b103-48bd72987fe5",
+    "username": "user1",
+    "email": "user1@email.com",
+    "password": "$2a$10$t7QMUV0inGrnk3yQuzYySuTgCi3I0BtGDrxL2MXVVV1zdvW0qlacG",
+    "role": "user",
+    "points": 100,
+    "solvedChallenges": [
+      "0c2ff69b-14c8-484a-aac5-263e233ba8b0"
+    ],
+    "createdAt": "2026-05-11T11:13:25.345Z",
+    "displayName": "hacker1",
+    "bio": "",
+    "avatarUrl": "",
+    "github": "",
+    "twitter": "",
+    "linkedin": "",
+    "website": "",
+    "notifications": [],
+    "notifUnread": 0
+  },
+  {
+    "id": "477d036a-269b-4a73-b89d-0887d5c6f4bb",
+    "username": "user2",
+    "email": "user2@email.com",
+    "password": "$2a$10$OMTlrAtgFF3ZzPO7d30MVOXh222Dio.6KrnEp2q5HCgOJ1kZ1cr5a",
+    "role": "user",
+    "points": 0,
+    "solvedChallenges": [],
+    "createdAt": "2026-05-11T19:52:36.036Z",
+    "github": "https://github.com/user2",
+    "twitter": "",
+    "linkedin": "",
+    "website": "",
+    "displayName": "user2",
+    "bio": "",
+    "avatarUrl": "",
+    "notifications": [
+      {
+        "id": "6b400970-081c-4c6a-bd63-5087c13a5c2b",
+        "type": "new_challenge",
+        "title": "New Challenge: sample 1",
+        "message": "A new Web challenge has been added (100pts)",
+        "challengeId": "13192530-190e-4d01-a80d-8425dc3f54ff",
+        "createdAt": "2026-05-11T22:34:12.580Z",
+        "read": true
+      }
+    ],
+    "notifUnread": 0
+  },
+  {
+    "id": "85bece8c-1bde-4942-a203-b3e4f6fe5208",
+    "username": "user3",
+    "email": "user3@email.com",
+    "password": "$2a$10$z.2uP0LUnB8OlTnDBc8n5.kc4Z7dLRhuUSWvEIJAoJmNBwyPZOesu",
+    "role": "user",
+    "points": 0,
+    "solvedChallenges": [],
+    "createdAt": "2026-05-12T08:32:52.413Z",
+    "github": "",
+    "twitter": "",
+    "linkedin": "",
+    "website": "",
+    "notifications": []
+  },
+  {
+    "id": "85d6130e-3192-42cc-b155-30f275420dc3",
+    "username": "hello",
+    "email": "hello@gmail.com",
+    "password": "$2a$10$B1weF5DLtzGe6OI0n40sUO.SI8v.2E2yBGX1uyx7LlZEac27sU7aK",
+    "role": "user",
+    "points": 250,
+    "solvedChallenges": [
+      "0c2ff69b-14c8-484a-aac5-263e233ba8b0",
+      "935f93ac-76c1-4e2d-9874-e147d86ac656"
+    ],
+    "createdAt": "2026-05-13T16:07:01.651Z",
+    "github": "",
+    "twitter": "",
+    "linkedin": "",
+    "website": "",
+    "notifications": []
+  }
+]

@@ -1,0 +1,57 @@
+<%- include('partials/header') %>
+<%- include('partials/user-shell') %>
+
+      <div class="page-header">
+        <div class="breadcrumb">Challenges</div>
+        <div class="page-title">Challenges</div>
+        <div class="page-subtitle">Browse and solve CTF challenges across multiple categories.</div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="search-input" type="text" placeholder="Search challenges..." id="challengeSearch" />
+        </div>
+        <div class="filter-btn" id="filterAll">All</div>
+        <div class="filter-btn" id="filterEasy">Easy</div>
+        <div class="filter-btn" id="filterMedium">Medium</div>
+        <div class="filter-btn" id="filterHard">Hard</div>
+        <div class="filter-btn" id="filterInsane">Insane</div>
+        <div class="filter-btn accent ml-auto" id="showSolved">Solved ✓</div>
+      </div>
+
+      <div class="labs-grid" id="challengeGrid">
+        <% if (challenges.length === 0) { %>
+        <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted);font-size:12px">No challenges available</div>
+        <% } else { %>
+        <% challenges.forEach(c => { %>
+        <% const solved = (user.solvedChallenges || []).includes(c.id); %>
+        <a href="/challenges/<%= c.id %>" class="lab-card" style="text-decoration:none;display:block" data-difficulty="<%= c.difficulty %>" data-solved="<%= solved %>">
+          <div class="lab-card-top">
+            <div class="lab-icon <%= c.category === 'Web' ? 'red' : c.category === 'Crypto' ? 'orange' : c.category === 'Forensics' ? 'cyan' : c.category === 'Pwn' ? 'purple' : c.category === 'Reverse' ? 'green' : 'red' %>">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 13L2 9z"/></svg>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+            <span class="td-badge <%= c.difficulty %>"><%= c.difficulty.charAt(0).toUpperCase() + c.difficulty.slice(1) %></span>
+            <% if (solved) { %><span class="td-badge active" style="background:rgba(48,209,88,0.15)!important;color:var(--green)!important;border:1px solid rgba(48,209,88,0.3)">SOLVED</span><% } %>
+            </div>
+          </div>
+          <div class="lab-name"><%= c.title %></div>
+          <div class="lab-type"><%= c.category %> · <%= c.points %> pts</div>
+          <% if (solved) { %>
+          <div style="margin-top:8px;font-size:10px;color:var(--green)">✓ Solved</div>
+          <% } %>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Solves</span><span><%= c.solves || 0 %></span></div>
+            <div class="progress-bar"><div class="progress-fill green" style="width:<%= Math.min(100, (c.solves || 0) * 5) %>%"></div></div>
+          </div>
+          <div class="lab-stats">
+            <div class="lab-stat"><div class="lab-stat-val"><%= c.points %></div><div class="lab-stat-label">Points</div></div>
+            <div class="lab-stat"><div class="lab-stat-val <%= solved ? 'green-text' : '' %>"><%= solved ? 'Done' : 'Open' %></div><div class="lab-stat-label">Status</div></div>
+          </div>
+        </a>
+        <% }); %>
+        <% } %>
+      </div>
+
+<%- include('partials/footer') %>

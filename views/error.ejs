@@ -1,0 +1,8 @@
+<%- include('partials/header') %>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;flex-direction:column;text-align:center">
+  <div style="font-size:48px;font-family:var(--font-head);font-weight:800;color:var(--accent);margin-bottom:16px">!</div>
+  <div class="page-title" style="font-size:24px;margin-bottom:8px">Oops</div>
+  <div class="page-subtitle" style="margin-bottom:24px"><%= typeof error !== 'undefined' ? error : 'Something went wrong' %></div>
+  <a href="/" class="filter-btn accent" style="padding:10px 20px">Go Home</a>
+</div>
+<%- include('partials/footer') %>

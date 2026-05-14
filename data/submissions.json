@@ -1,0 +1,58 @@
+[
+  {
+    "id": "d124b2d1-574a-4b1e-b96b-49d620e0f582",
+    "userId": "f4b85f42-cfe4-4915-b103-48bd72987fe5",
+    "challengeId": "0c2ff69b-14c8-484a-aac5-263e233ba8b0",
+    "flag": "CTF{sql_1nj3ct10n_b4s1cs}",
+    "correct": true,
+    "timestamp": "2026-05-12T08:28:44.979Z"
+  },
+  {
+    "id": "afe40864-10c6-4b7f-a6a8-66c9d350c1f4",
+    "userId": "85d6130e-3192-42cc-b155-30f275420dc3",
+    "challengeId": "935f93ac-76c1-4e2d-9874-e147d86ac656",
+    "flag": "CTF{Caesar is easy at first}",
+    "correct": false,
+    "timestamp": "2026-05-13T16:08:35.068Z"
+  },
+  {
+    "id": "1b13d105-b07b-4f0b-bbee-07110bd1b7f7",
+    "userId": "85d6130e-3192-42cc-b155-30f275420dc3",
+    "challengeId": "935f93ac-76c1-4e2d-9874-e147d86ac656",
+    "flag": "Caesar is easy at first",
+    "correct": false,
+    "timestamp": "2026-05-13T16:08:39.076Z"
+  },
+  {
+    "id": "0c41daf2-b41d-423e-829e-fb0a4f69b537",
+    "userId": "85d6130e-3192-42cc-b155-30f275420dc3",
+    "challengeId": "935f93ac-76c1-4e2d-9874-e147d86ac656",
+    "flag": "CTF{Caesarciseasyinthefirst}",
+    "correct": false,
+    "timestamp": "2026-05-13T16:09:26.375Z"
+  },
+  {
+    "id": "303f3cc4-43da-4747-80ac-901632dea219",
+    "userId": "85d6130e-3192-42cc-b155-30f275420dc3",
+    "challengeId": "935f93ac-76c1-4e2d-9874-e147d86ac656",
+    "flag": "Caesarciseasyinthefirst",
+    "correct": false,
+    "timestamp": "2026-05-13T16:09:29.528Z"
+  },
+  {
+    "id": "34497245-8843-4bec-9148-36a98fc1281e",
+    "userId": "85d6130e-3192-42cc-b155-30f275420dc3",
+    "challengeId": "0c2ff69b-14c8-484a-aac5-263e233ba8b0",
+    "flag": "CTF{sql_1nj3ct10n_b4s1cs}",
+    "correct": true,
+    "timestamp": "2026-05-13T16:21:48.793Z"
+  },
+  {
+    "id": "6eab2283-8060-458e-9010-e5c8f595fbb9",
+    "userId": "85d6130e-3192-42cc-b155-30f275420dc3",
+    "challengeId": "935f93ac-76c1-4e2d-9874-e147d86ac656",
+    "flag": "CTF{caesaris_easy_inthe_first}",
+    "correct": true,
+    "timestamp": "2026-05-13T16:22:52.461Z"
+  }
+]

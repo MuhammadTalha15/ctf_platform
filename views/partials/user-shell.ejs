@@ -1,0 +1,201 @@
+<div class="app">
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="logo-text">CTF<span>Arena</span></div>
+    </div>
+    <div class="logo-sub">Capture The Flag</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Main</div>
+    <a href="/dashboard" class="nav-item <%= currentPage === 'dashboard' ? 'active' : '' %>">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <a href="/challenges" class="nav-item <%= ['challenges','challenge'].includes(currentPage) ? 'active' : '' %>">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 13L2 9z"/></svg>
+      Challenges
+    </a>
+    <a href="/leaderboard" class="nav-item <%= currentPage === 'leaderboard' ? 'active' : '' %>">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Leaderboard
+    </a>
+    <div class="nav-section">Account</div>
+    <a href="/profile" class="nav-item <%= currentPage === 'profile' ? 'active' : '' %>">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile
+    </a>
+    <a href="/logout" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Logout
+    </a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-avatar" style="overflow:hidden;position:relative">
+      <% if (user.avatarUrl) { %>
+      <img src="<%= user.avatarUrl %>" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%">
+      <% } else { %>
+      <%= (user.displayName || user.username).charAt(0).toUpperCase() %>
+      <% } %>
+    </div>
+    <div class="user-info">
+      <div class="user-name"><%= user.displayName || user.username %></div>
+      <div class="user-role"><%= user.role === 'admin' ? 'Administrator' : 'Player' %> · <%= user.points || 0 %> pts</div>
+    </div>
+    <div class="user-status"></div>
+  </div>
+</aside>
+<main class="main">
+  <div class="theme-curtain" id="themeCurtain"></div>
+  <div class="topbar">
+    <div class="hamburger" id="hamburgerBtn" onclick="document.getElementById('sidebar').classList.toggle('active');document.getElementById('sidebarOverlay').classList.toggle('active')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </div>
+    <div class="topbar-date" id="topbarDate"></div>
+    <div class="topbar-actions" style="display:flex;align-items:center;gap:8px">
+      <button class="theme-btn" id="themeToggle" onclick="toggleTheme()" data-tooltip="Toggle theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <div class="notif-wrap" id="notifWrap">
+        <button class="topbar-btn" id="notifBell" onclick="toggleNotifPanel()" title="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-badge" id="notifBadge" style="display:none">0</span>
+        </button>
+        <div class="notif-panel" id="notifPanel">
+          <div class="notif-panel-accent"></div>
+          <div class="notif-panel-header">
+            <span class="notif-panel-title">Notifications</span>
+            <button class="notif-mark-read" id="notifMarkRead" onclick="markAllRead()" title="Mark all read" style="display:none">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 12 7 18 13 6"/><polyline points="9 12 15 18 21 6"/></svg>
+            </button>
+          </div>
+          <div class="notif-list" id="notifList"><div class="notif-empty">No notifications</div></div>
+        </div>
+      </div>
+      <div class="pts-pill">
+        <span class="pts-val"><%= user.points || 0 %></span> pts
+      </div>
+      <div class="user-avatar" style="width:32px;height:32px;overflow:hidden;position:relative">
+        <% if (user.avatarUrl) { %>
+        <img src="<%= user.avatarUrl %>" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%">
+        <% } else { %>
+        <%= (user.displayName || user.username).charAt(0).toUpperCase() %>
+        <% } %>
+      </div>
+    </div>
+  <style>
+  .notif-wrap{position:relative}
+  .notif-badge{position:absolute;top:-2px;right:-2px;min-width:18px;height:18px;background:linear-gradient(135deg,var(--accent),#ff6b6b);border:2px solid var(--surface);border-radius:9px;font-size:8px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;line-height:1;padding:0 4px;letter-spacing:0;animation:notifPulse 2s ease-in-out infinite}
+  @keyframes notifPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+  .notif-panel{position:absolute;top:calc(100% + 10px);right:-8px;width:380px;max-height:420px;background:linear-gradient(160deg,rgba(12,12,12,0.98),rgba(6,6,6,0.98));border:1px solid rgba(255,255,255,0.07);border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,0.7),0 0 0 1px rgba(255,255,255,0.02) inset;display:none;z-index:200;overflow:hidden;animation:notifSlideIn 0.2s cubic-bezier(0.16,1,0.3,1);backdrop-filter:blur(16px)}
+  .notif-panel.open{display:block}
+  @keyframes notifSlideIn{from{opacity:0;transform:translateY(6px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+  .notif-panel-accent{height:2px;background:linear-gradient(90deg,var(--accent),var(--cyan),var(--purple));border-radius:14px 14px 0 0}
+  .notif-panel-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.05)}
+  .notif-panel-title{font-size:12px;font-weight:700;color:var(--text);letter-spacing:0.02em}
+  .notif-mark-read{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:var(--text-muted);cursor:pointer;width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all 0.2s}
+  .notif-mark-read:hover{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+  .notif-mark-read svg{width:14px;height:14px}
+  .notif-list{overflow-y:auto;max-height:340px}
+  .notif-item{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:11px;transition:all 0.2s;cursor:pointer;position:relative}
+  .notif-item:last-child{border-bottom:none}
+  .notif-item:hover{background:rgba(255,255,255,0.03)}
+  .notif-item:hover .notif-dismiss{opacity:1}
+  .notif-item-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
+  .notif-item-icon svg{width:16px;height:16px}
+  .notif-item-icon.new-challenge{background:linear-gradient(135deg,rgba(0,194,255,0.15),rgba(0,194,255,0.05));color:var(--cyan)}
+  .notif-item-icon.solved{background:linear-gradient(135deg,rgba(0,255,136,0.15),rgba(0,255,136,0.05));color:var(--green)}
+  .notif-item-icon.default{background:linear-gradient(135deg,rgba(255,45,45,0.15),rgba(255,45,45,0.05));color:var(--accent)}
+  .notif-item-body{flex:1;min-width:0}
+  .notif-item-title{color:var(--text);font-weight:600;margin-bottom:3px;font-size:11px;line-height:1.4}
+  .notif-item-msg{color:var(--text-muted);font-size:10px;line-height:1.5}
+  .notif-item-time{display:inline-flex;align-items:center;gap:4px;color:var(--text-dim);font-size:9px;margin-top:5px}
+  .notif-item-time::before{content:'';width:3px;height:3px;border-radius:50%;background:var(--text-dim)}
+  .notif-dismiss{position:absolute;top:10px;right:12px;background:none;border:none;color:var(--text-dim);cursor:pointer;padding:4px;border-radius:4px;line-height:1;flex-shrink:0;opacity:0;transition:all 0.2s}
+  .notif-dismiss:hover{color:var(--accent);background:rgba(255,45,45,0.1)}
+  .notif-dismiss svg{width:12px;height:12px;display:block}
+  .notif-empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:40px 20px;color:var(--text-muted);font-size:11px}
+  .notif-empty svg{width:32px;height:32px;opacity:0.2}
+  .pts-pill{font-size:10px;color:var(--text-muted);padding:4px 12px;background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.06);border-radius:20px;display:flex;align-items:center;gap:5px;white-space:nowrap}
+  .pts-val{color:var(--accent);font-weight:800;font-size:12px;font-family:var(--font-head)}
+  </style>
+  <script>
+  var notifIcons = {
+    new_challenge: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 13L2 9z"/></svg>',
+    solved: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>',
+    default: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+  };
+  function notifIcon(type) { return notifIcons[type] || notifIcons.default; }
+  function notifIconClass(type) { return type === 'new_challenge' ? 'new-challenge' : type === 'solved' ? 'solved' : 'default'; }
+  function fetchUnread() {
+    fetch('/api/notifications/unread').then(function(r){return r.json()}).then(function(d){
+      var badge = document.getElementById('notifBadge');
+      if (d.unread > 0) { badge.textContent = d.unread > 9 ? '9+' : d.unread; badge.style.display = 'flex'; } else { badge.style.display = 'none'; }
+    });
+  }
+  fetchUnread();
+  function toggleNotifPanel() {
+    var p = document.getElementById('notifPanel');
+    if (p.classList.contains('open')) { p.classList.remove('open'); return; }
+    p.classList.add('open');
+    document.getElementById('notifBadge').style.display = 'none';
+    fetch('/api/notifications/read', { method: 'POST' }).then(function(){ return fetch('/api/notifications'); }).then(function(r){return r.json()}).then(function(n){renderNotifs(n)});
+  }
+  function renderNotifs(notifs) {
+    var list = document.getElementById('notifList');
+    var markBtn = document.getElementById('notifMarkRead');
+    if (!notifs || !notifs.length) {
+      list.innerHTML = '<div class="notif-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg><span>No notifications</span></div>';
+      markBtn.style.display = 'none';
+      return;
+    }
+    markBtn.style.display = 'flex';
+    list.innerHTML = notifs.map(function(n, i){
+      var icon = notifIcon(n.type);
+      var cls = 'notif-item-icon ' + notifIconClass(n.type);
+      var delay = i * 0.03;
+      return '<div class="notif-item" onclick="openNotif(\''+escHtml(n.challengeId)+'\',event)" style="animation:notifSlideIn 0.25s ease '+delay+'s both">' +
+        '<div class="'+cls+'">'+icon+'</div>' +
+        '<div class="notif-item-body">' +
+          '<div class="notif-item-title">'+escHtml(n.title)+'</div>' +
+          '<div class="notif-item-msg">'+escHtml(n.message)+'</div>' +
+          '<div class="notif-item-time">'+timeAgo(n.createdAt)+'</div>' +
+        '</div>' +
+        '<button class="notif-dismiss" onclick="event.stopPropagation();dismissNotif(\''+n.id+'\',this)" title="Dismiss">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+        '</button></div>';
+    }).join('');
+  }
+  function markAllRead() {
+    fetch('/api/notifications/read', { method: 'POST' }).then(function(){
+      document.getElementById('notifMarkRead').style.display = 'none';
+      document.getElementById('notifBadge').style.display = 'none';
+      var items = document.querySelectorAll('.notif-item');
+      items.forEach(function(it) { it.style.opacity = '0.5'; });
+    });
+  }
+  function openNotif(challengeId, e) {
+    if (challengeId) window.location.href = '/challenges/' + encodeURIComponent(challengeId);
+  }
+  function escHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+  function timeAgo(ts){
+    var diff = Math.floor((Date.now()-new Date(ts).getTime())/1000);
+    if(diff<60)return 'just now';if(diff<3600)return Math.floor(diff/60)+'m ago';if(diff<86400)return Math.floor(diff/3600)+'h ago';return Math.floor(diff/86400)+'d ago';
+  }
+  function dismissNotif(id,btn) {
+    fetch('/api/notifications/'+encodeURIComponent(id)+'/dismiss',{method:'POST'}).then(function(r){return r.json()}).then(function(d){
+      if(d.success){var item=btn.closest('.notif-item');if(item)item.style.transform='translateX(40px)';if(item)item.style.opacity='0';setTimeout(function(){if(item)item.remove();var list=document.getElementById('notifList');if(!list||!list.querySelector('.notif-item')){list.innerHTML='<div class="notif-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg><span>No notifications</span></div>';document.getElementById('notifMarkRead').style.display='none';}},200);}
+    });
+  }
+  document.addEventListener('click', function(e) {
+    var w = document.getElementById('notifWrap');
+    if (w && !w.contains(e.target)) document.getElementById('notifPanel').classList.remove('open');
+  });
+  </script>
+  </div>
+  <div class="content">
+    <div class="page active">

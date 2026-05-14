@@ -1,0 +1,127 @@
+<%- include('../partials/header') %>
+<%- include('../partials/admin-shell') %>
+
+      <div class="page-header">
+        <div class="breadcrumb">Admin <span>›</span> Users</div>
+        <div class="page-title">User Management</div>
+        <div class="page-subtitle">Manage all registered users and their permissions. <%= users.length %> total accounts.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="filter-bar" style="padding:0;flex:1">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input class="search-input" type="text" placeholder="Search users..." id="userSearch" />
+            </div>
+            <div class="filter-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg> Filter</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Points</th><th>Solved</th><th>Joined</th><th></th></tr></thead>
+            <tbody>
+              <% if (users.length === 0) { %>
+              <tr><td colspan="7" style="text-align:center;padding:40px 20px;color:var(--text-muted);font-size:12px">No users yet</td></tr>
+              <% } else { %>
+              <% users.forEach(u => { %>
+              <tr>
+                <td><div class="td-avatar"><div class="mini-av"><%= (u.username || '?').charAt(0).toUpperCase() %></div><%= u.username %></div></td>
+                <td class="td-mono"><%= u.email %></td>
+                <td><span class="td-badge <%= u.role === 'admin' ? 'running' : 'active' %>"><%= u.role %></span></td>
+                <td class="<%= u.points > 500 ? 'orange-text' : u.points > 0 ? 'green-text' : '' %>"><%= u.points || 0 %></td>
+                <td class="td-mono"><%= (u.solvedChallenges || []).length %></td>
+                <td class="td-mono"><%= new Date(u.createdAt).toLocaleDateString() %></td>
+                <td>
+                  <% if (u.role !== 'admin') { %>
+                  <div class="td-action">
+                    <button type="button" onclick="showConfirmModal('<%= u.id %>', 'reset-points', '<%= u.username %>')" class="filter-btn" style="padding:4px 10px;font-size:10px">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Reset
+                    </button>
+                    <button type="button" onclick="showConfirmModal('<%= u.id %>', 'delete', '<%= u.username %>')" class="filter-btn" style="padding:4px 10px;font-size:10px;border-color:rgba(255,45,45,0.3);color:var(--accent)">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Delete
+                    </button>
+                  </div>
+                  <% } else { %>
+                  <span class="td-mono" style="font-size:10px">Protected</span>
+                  <% } %>
+                </td>
+              </tr>
+              <% }); %>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <span>Showing 1–<%= Math.min(users.length, 50) %> of <%= users.length %> users</span>
+          <div class="page-btns">
+            <div class="page-btn active">1</div>
+          </div>
+        </div>
+      </div>
+
+<div id="confirmModal" class="confirm-overlay" style="display:none" onclick="closeConfirmModal(event)">
+  <div class="confirm-card" onclick="event.stopPropagation()">
+    <div class="confirm-header">
+      <div class="confirm-title" id="confirmTitle">Confirm Action</div>
+      <button class="confirm-close" onclick="closeConfirmModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="confirm-body">
+      <div class="confirm-desc" id="confirmDesc">Type your admin password and the target username to confirm.</div>
+      <form id="confirmForm" method="POST">
+        <div style="margin-bottom:12px">
+          <label class="confirm-label">Target Username *</label>
+          <input type="text" id="confirmUsername" name="confirmUsername" class="settings-input" style="width:100%" placeholder="Type the username to confirm" required>
+        </div>
+        <div style="margin-bottom:16px">
+          <label class="confirm-label">Your Admin Password *</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" class="settings-input" style="width:100%" placeholder="Enter your admin password" required>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button type="button" onclick="closeConfirmModal()" class="filter-btn" style="padding:8px 16px">Cancel</button>
+          <button type="submit" id="confirmSubmitBtn" class="filter-btn" style="padding:8px 16px;background:var(--accent-dim);border-color:var(--accent);color:var(--accent)">Confirm</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+.confirm-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center}
+.confirm-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;width:380px;max-width:92vw}
+.confirm-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)}
+.confirm-title{font-size:13px;font-weight:600;color:var(--text)}
+.confirm-close{background:none;border:none;color:var(--text-dim);cursor:pointer;padding:4px;line-height:1}
+.confirm-close:hover{color:var(--text)}
+.confirm-close svg{width:14px;height:14px;display:block}
+.confirm-body{padding:18px}
+.confirm-desc{font-size:11px;color:var(--text-muted);margin-bottom:14px;line-height:1.5}
+.confirm-label{display:block;font-size:11px;color:var(--text-muted);margin-bottom:4px}
+</style>
+
+<script>
+var confirmModal = document.getElementById('confirmModal');
+var confirmForm = document.getElementById('confirmForm');
+var confirmTitle = document.getElementById('confirmTitle');
+var confirmDesc = document.getElementById('confirmDesc');
+var confirmUsername = document.getElementById('confirmUsername');
+
+function showConfirmModal(userId, action, username) {
+  var actionLabel = action === 'delete' ? 'Delete' : 'Reset';
+  confirmTitle.textContent = actionLabel + ' User';
+  confirmDesc.textContent = 'This action requires admin verification. Type "' + username + '" and your admin password to confirm.';
+  confirmForm.action = '/admin/users/' + userId + '/' + action;
+  confirmUsername.placeholder = 'Type "' + username + '" to confirm';
+  confirmModal.style.display = 'flex';
+  confirmUsername.value = '';
+  document.getElementById('confirmPassword').value = '';
+  confirmUsername.focus();
+}
+
+function closeConfirmModal(e) {
+  if (e && e.target !== confirmModal) return;
+  confirmModal.style.display = 'none';
+}
+</script>
+
+<%- include('../partials/footer') %>
