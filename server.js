@@ -240,9 +240,11 @@ async function seedData() {
 }
 
 seedData().then(() => {
-  app.listen(PORT, () => {
-    console.log(`CTF Platform running on http://localhost:${PORT}`);
-    console.log(`Admin login: admin / admin123`);
-    console.log(`User login: hacker1 / user123`);
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`🚀 CTF Platform running`);
+    console.log(`🌐 Local:   http://localhost:${PORT}`);
+    console.log(`🌍 Network: http://<YOUR_KALI_IP>:${PORT}`);
+    console.log(`👤 Admin login: admin / admin123`);
+    console.log(`👤 User login: hacker1 / user123`);
   });
 });
