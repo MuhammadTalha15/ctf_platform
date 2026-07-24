@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const session = require('express-session');
 const helmet = require('helmet');
@@ -13,6 +15,9 @@ const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 const SESSION_SECRET = process.env.SESSION_SECRET;
+
+console.log(SESSION_SECRET);
+
 if (!SESSION_SECRET) {
   console.error('FATAL: SESSION_SECRET environment variable is required. Set a strong random secret.');
   if (NODE_ENV === 'production') {
@@ -174,6 +179,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const challengeRoutes = require('./routes/challenges');
 const adminRoutes = require('./routes/admin');
+const { CLIENT_RENEG_LIMIT } = require('tls');
 app.use('/', authRoutes);
 app.use('/', userRoutes);
 app.use('/', challengeRoutes);
